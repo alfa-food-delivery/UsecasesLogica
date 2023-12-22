@@ -1,0 +1,232 @@
+openapi: 3.0.3
+info:
+  title: Swagger Profili REST - OpenAPI 3.0
+  description: |-
+    Servizio per la gestione dei profili.
+
+    _If you're looking for the Swagger 2.0/OAS 2.0 version of SpeseManager, then click [here](https://editor.swagger.io/?url=https://petstore.swagger.io/v2/swagger.yaml). Alternatively, you can load via the `Edit > Load Petstore OAS 2.0` menu option!_
+    
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: enrico.trx@hotmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: http://localhost:8080/ProfiliServ/
+tags:
+  - name: profilo
+    description: Tutto riguardo i tuoi profili
+paths:
+  /profilo:
+  
+    get:
+      tags:
+        - profilo
+      summary: Ottieni i profili esistenti
+      description: Ottieni i profili esistenti
+      operationId: elencoProfili
+      responses:
+        '200':
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profilo'    
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Profilo'
+        '404':
+          description: Profili non trovati
+        '500':
+          description: Internal Server Error
+          
+    post:
+      tags:
+        - profilo
+      summary: Aggiungi un nuovo profilo
+      description: Aggiungi un nuovo profilo
+      operationId: creaProfilo
+      requestBody:
+        description: Crea un nuovo profilo
+        content:
+          application/json:
+              schema:
+                $ref: '#/components/schemas/Profilo'    
+          application/xml:
+              schema:
+                $ref: '#/components/schemas/Profilo'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Profilo'
+        required: true
+      responses:
+        '200':
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profilo'        
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Profilo'
+        '405':
+          description: Input non valido
+  
+  /profilo/{id}:
+    get:
+      tags:
+        - profilo
+      summary: Trova profilo dall'ID (hashed)
+      description: Ritorna un singolo profilo
+      operationId: getProfilo
+      parameters:
+        - name: id
+          in: path
+          description: ID del profilo da restituire
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profilo'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Profilo'
+        '400':
+          description: ID fornito non valido
+        '404':
+          description: Profilo non trovato
+    put:
+      tags:
+        - profilo
+      summary: Update di una profilo esistente
+      description: Update di un profilo esistente dato l'Id
+      operationId: aggiornaProfilo
+      requestBody:
+        description: Update di un profilo esistente
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Profilo'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Profilo'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/profilo'
+        required: true
+      responses:
+        '200':
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profilo'        
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Profilo'
+        '400':
+          description: ID fornito non valido
+        '404':
+          description: Profilo non trovato
+        '405':
+          description: Errore di validazione
+            
+    delete:
+      tags:
+        - profilo
+      summary: Cancella un profilo
+      description: cancella un profilo dato l'id
+      operationId: cancellaProfilo
+      parameters:
+        - name: api_key
+          in: header
+          description: cancella un profilo
+          required: false
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: ID del profilo da eliminare
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Operazione riuscita!
+        '400':
+          description: ID fornito non valido
+        '404':
+          description: Profilo non trovato!
+        
+components:
+  schemas:
+
+    Profilo:
+      required:
+        - id_utente
+        - id_ruolo
+        - nome
+        - cognome
+        - indirizzo
+        - telefono
+        - data_nascita
+      type: object
+      properties:
+        id_profilo:
+          type: integer
+          format: int64
+          example: 10
+        id_utente:
+          type: integer
+          format: int64
+          example: 10
+        nome:
+          type: string
+          example: 'Mario'
+        cognome:
+          type: string
+          example: 'Rossi'
+        indirizzo:
+          type: string
+          example: 'Via Veglia 137'
+        telefono:
+          type: string
+          example: '39 583 948 2482'
+        data_nascita:
+          type: date
+          example: '2023-12-22'
+        
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+      xml:
+        name: '##default'
+  requestBodies:
+    Profilo:
+      description: oggetto Profilo da aggiungere al registro
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Profilo'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Profilo'
