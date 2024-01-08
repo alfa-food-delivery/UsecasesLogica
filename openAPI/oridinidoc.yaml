@@ -1,0 +1,234 @@
+openapi: 3.0.3
+info:
+  title: Swagger Ordini REST - OpenAPI 3.0
+  description: |-
+    Servizio per la gestione dei Ordini.
+
+    _If you're looking for the Swagger 2.0/OAS 2.0 version of SpeseManager, then click [here](https://editor.swagger.io/?url=https://petstore.swagger.io/v2/swagger.yaml). Alternatively, you can load via the `Edit > Load Petstore OAS 2.0` menu option!_
+    
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: enrico.trx@hotmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: http://localhost:8080/OrdiniServ/
+tags:
+  - name: ordine
+    description: Tutto riguardo i tuoi ordini
+paths:
+  /ordine:
+  
+    get:
+      tags:
+        - ordine
+      summary: Ottieni gli ordini esistenti
+      description: Ottienigli ordini esistenti
+      operationId: elencoOrdini
+      responses:
+        '200':
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ordine'    
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Ordine'
+        '404':
+          description: Ordini non trovati
+        '500':
+          description: Internal Server Error
+          
+    post:
+      tags:
+        - ordine
+      summary: Aggiungi un nuovo ordine
+      description: Aggiungi un nuovo ordine
+      operationId: creaOrdine
+      requestBody:
+        description: Crea un nuovo ordine
+        content:
+          application/json:
+              schema:
+                $ref: '#/components/schemas/Ordine'    
+          application/xml:
+              schema:
+                $ref: '#/components/schemas/Ordine'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Ordine'
+        required: true
+      responses:
+        '200':
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ordine'  
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Ordine'
+        '405':
+          description: Input non valido
+  
+  /ordine/{cliente}:
+    get:
+      tags:
+        - ordine
+      summary: Trova ordini dall'ID del profilo che ha effettuato l'ordine (hashed)
+      description: Ritorna un singolo ordine
+      operationId: getOrdine
+      parameters:
+        - name: id
+          in: path
+          description: ID del profilo legato all'ordine
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ordine'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Ordine'
+        '400':
+          description: ID fornito non valido
+        '404':
+          description: Ordine non trovato
+    <-------------------->
+    put:
+      tags:
+        - turno
+      summary: Update di un turno esistente
+      description: Update di un turno esistente dato l'Id turno
+      operationId: aggiornaTurno
+      parameters:
+        - name: id
+          in: path
+          description: ID del turno che si vuole aggiornare
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: orario
+          in: path
+          description: Orario inizio/fine turno (in base al tipo)
+          required: true
+          schema:
+            type: timestamp
+      requestBody:
+        description: Update di un turno esistente
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Turno'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Turno'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Turno'
+        required: true
+      responses:
+        '200':
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Turno'        
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Turno'
+        '400':
+          description: ID fornito non valido
+        '404':
+          description: Turno non trovato
+        '405':
+          description: Errore di validazione
+            
+    delete:
+      tags:
+        - turno
+      summary: Cancella un turno
+      description: cancella un turno dato l'id
+      operationId: cancellaTurno
+      parameters:
+        - name: api_key
+          in: header
+          description: cancella un turno 
+          required: false
+          schema:
+            type: int
+        - name: id
+          in: path
+          description: ID del turno da eliminare
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Operazione riuscita!
+        '400':
+          description: ID fornito non valido
+        '404':
+          description: Turno non trovato!
+        
+
+components:
+  schemas:
+
+    Turno:
+      required:
+        - id_profilo
+      type: object
+      properties:
+        id_turno:
+          type: integer
+          format: int64
+          example: 2
+        id_profilo:
+          type: integer
+          format: int64
+          example: 10
+        tipo:
+          type: integer
+          format: int64
+          example: 23
+        orario:
+          type: timestamp
+          example: '2024-01-08'
+         
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+      xml:
+        name: '##default'
+  requestBodies:
+    Utente:
+      description: oggetto Turno da aggiungere al registro
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Turno'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Turno'
