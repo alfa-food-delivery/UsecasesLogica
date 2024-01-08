@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: Swagger Turni REST - OpenAPI 3.0
   description: |-
-    Servizio per la gestione degli turni.
+    Servizio per la gestione dei turni.
 
     _If you're looking for the Swagger 2.0/OAS 2.0 version of SpeseManager, then click [here](https://editor.swagger.io/?url=https://petstore.swagger.io/v2/swagger.yaml). Alternatively, you can load via the `Edit > Load Petstore OAS 2.0` menu option!_
     
@@ -28,7 +28,7 @@ paths:
       tags:
         - turno
       summary: Ottieni i turni esistenti
-      description: Ottieni gli turni esistenti
+      description: Ottieni i turni esistenti
       operationId: elencoTurni
       responses:
         '200':
@@ -41,7 +41,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Turno'
         '404':
-          description: Turno non trovati
+          description: Turni non trovati
         '500':
           description: Internal Server Error
           
@@ -110,8 +110,22 @@ paths:
       tags:
         - turno
       summary: Update di un turno esistente
-      description: Update di un turno esistente dato l'Id
+      description: Update di un turno esistente dato l'Id turno
       operationId: aggiornaTurno
+      parameters:
+        - name: id
+          in: path
+          description: ID del turno che si vuole aggiornare
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: orario
+          in: path
+          description: Orario inizio/fine turno (in base al tipo)
+          required: true
+          schema:
+            type: timestamp
       requestBody:
         description: Update di un turno esistente
         content:
@@ -165,51 +179,35 @@ paths:
       responses:
         '200':
           description: Operazione riuscita!
-          
         '400':
           description: ID fornito non valido
         '404':
           description: Turno non trovato!
         
-  /turno/hours:
-    get:
-      tags:
-        - turno
-      summary: restituisce le ore lavorative di un fattorino
-      description: restituisce le ore lavorative di un fattorino
-      operationId: getHours
-      parameters:
-        - name: api_key
-          in: header
-          description: cancella un turno 
-          required: false
-          schema:
-            type: int
-        - in: path
-          name: id
-          description: ID del fattorino
-          required: true
-          schema: 
-            type: int
-            format: Int64
-      response:
-        
-  
+
 components:
   schemas:
 
-    Utente:
+    Turno:
       required:
-        - email
+        - id_profilo
       type: object
       properties:
-        id_utente:
+        id_turno:
+          type: integer
+          format: int64
+          example: 2
+        id_profilo:
           type: integer
           format: int64
           example: 10
-        email:
-          type: string
-          example: 'nome.cognome@mail.com'
+        tipo:
+          type: integer
+          format: int64
+          example: 23
+        orario:
+          type: timestamp
+          example: '2024-01-08'
          
     ApiResponse:
       type: object
@@ -225,11 +223,11 @@ components:
         name: '##default'
   requestBodies:
     Utente:
-      description: oggetto Utente da aggiungere al registro
+      description: oggetto Turno da aggiungere al registro
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Utente'
+            $ref: '#/components/schemas/Turno'
         application/xml:
           schema:
-            $ref: '#/components/schemas/Utente'
+            $ref: '#/components/schemas/Turno'
