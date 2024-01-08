@@ -28,18 +28,18 @@ paths:
       tags:
         - provider
       summary: Ottieni i provider esistenti
-      description: Ottienigli ordini esistenti
-      operationId: elencoOrdini
+      description: Ottieni i provider esistenti
+      operationId: elencoProvider
       responses:
         '200':
           description: Operazione eseguita con successo
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Ordine'    
+                $ref: '#/components/schemas/Provider'    
             application/xml:
               schema:
-                $ref: '#/components/schemas/Ordine'
+                $ref: '#/components/schemas/Provider'
         '404':
           description: Ordini non trovati
         '500':
@@ -47,22 +47,22 @@ paths:
           
     post:
       tags:
-        - ordine
-      summary: Aggiungi un nuovo ordine
-      description: Aggiungi un nuovo ordine
-      operationId: creaOrdine
+        - provider
+      summary: Aggiungi un nuovo provider
+      description: Aggiungi un nuovo provider
+      operationId: creaProvider
       requestBody:
-        description: Crea un nuovo ordine
+        description: Crea un nuovo provider
         content:
           application/json:
               schema:
-                $ref: '#/components/schemas/Ordine'    
+                $ref: '#/components/schemas/Provider'
           application/xml:
               schema:
-                $ref: '#/components/schemas/Ordine'
+                $ref: '#/components/schemas/Provider'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/Ordine'
+              $ref: '#/components/schemas/Provider'
         required: true
       responses:
         '200':
@@ -70,24 +70,24 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Ordine'  
+                $ref: '#/components/schemas/Provider'  
             application/xml:
               schema:
-                $ref: '#/components/schemas/Ordine'
+                $ref: '#/components/schemas/Provider'
         '405':
           description: Input non valido
   
-  /ordine/{cliente}:
+  /provider/{categoria}:
     get:
       tags:
-        - ordine
-      summary: Trova ordini dall'ID del profilo che ha effettuato l'ordine (hashed)
-      description: Ritorna una lista di ordini
-      operationId: getOrdine
+        - provider
+      summary: Trova i provider in base alla categoria
+      description: Ritorna una lista di provider
+      operationId: getProvider
       parameters:
-        - name: id
+        - name: categoria
           in: path
-          description: ID del profilo legato all'ordine
+          description: ID della categoria di food provider
           required: true
           schema:
             type: integer
@@ -98,26 +98,26 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Ordine'          
+                $ref: '#/components/schemas/Provider'          
             application/xml:
               schema:
-                $ref: '#/components/schemas/Ordine'
+                $ref: '#/components/schemas/Provider'
         '400':
           description: ID fornito non valido
         '404':
-          description: Ordini non trovato
+          description: Provider non trovato
     
-  /ordine/{stato}:
+  /provider/{id}:
     get:
       tags:
-        - ordine
-      summary: Trova ordini dall'ID dello stato dell'ordine
-      description: Ritorna una lista di ordini
-      operationId: getOrdine
+        - provider
+      summary: Trova il provider in base all'id
+      description: Ritorna un singolo provider
+      operationId: getProvider
       parameters:
-        - name: stato
+        - name: id
           in: path
-          description: ID dello stato attuale dell'ordine
+          description: ID del food provider
           required: true
           schema:
             type: integer
@@ -128,48 +128,41 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Ordine'
+                $ref: '#/components/schemas/Provider'          
             application/xml:
               schema:
-                $ref: '#/components/schemas/Ordine'
+                $ref: '#/components/schemas/Provider'
         '400':
-          description: Stato fornito non valido
+          description: ID fornito non valido
         '404':
-          description: Ordine non trovato
+          description: Provider non trovato
     
-  /ordine/{id}:
     put:
       tags:
-        - ordine
-      summary: Update di un ordine esistente
-      description: Update di un ordine esistente dato l'Id ordine
-      operationId: aggiornaTurno
+        - provider
+      summary: Update di un provider esistente
+      description: Update di un provider esistente dato l'Id
+      operationId: aggiornaProvider
       parameters:
         - name: id
           in: path
-          description: ID del turno che si vuole aggiornare
+          description: ID del provider che si vuole aggiornare
           required: true
           schema:
             type: integer
             format: int64
-        - name: orario
-          in: path
-          description: Orario inizio/fine turno (in base al tipo)
-          required: true
-          schema:
-            type: timestamp
       requestBody:
-        description: Update di un turno esistente
+        description: Update di un provider esistente
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Turno'
+              $ref: '#/components/schemas/Provider'
           application/xml:
             schema:
-              $ref: '#/components/schemas/Turno'
+              $ref: '#/components/schemas/Provider'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/Turno'
+              $ref: '#/components/schemas/Provider'
         required: true
       responses:
         '200':
@@ -177,33 +170,33 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Turno'        
+                $ref: '#/components/schemas/Provider'        
             application/xml:
               schema:
-                $ref: '#/components/schemas/Turno'
+                $ref: '#/components/schemas/Provider'
         '400':
           description: ID fornito non valido
         '404':
-          description: Turno non trovato
+          description: Provider non trovato
         '405':
           description: Errore di validazione
             
     delete:
       tags:
-        - turno
-      summary: Cancella un turno
-      description: cancella un turno dato l'id
-      operationId: cancellaTurno
+        - provider
+      summary: Cancella un provider
+      description: cancella un provider dato l'id
+      operationId: cancellaProvider
       parameters:
         - name: api_key
           in: header
-          description: cancella un turno 
+          description: cancella un provider 
           required: false
           schema:
             type: int
         - name: id
           in: path
-          description: ID del turno da eliminare
+          description: ID del provider da eliminare
           required: true
           schema:
             type: integer
@@ -214,53 +207,46 @@ paths:
         '400':
           description: ID fornito non valido
         '404':
-          description: Turno non trovato!
+          description: Provider non trovato!
         
 
 components:
   schemas:
 
-    Ordine:
+    Provider:
       required:
-        - id_profilo_cliente
+        - id_food_provider
       type: object
       properties:
-        id_turno:
-          type: integer
-          format: int64
-          example: 2
-        id_profilo_fattorino:
-          type: integer
-          format: int64
-          example: 4
         id_food_provider:
           type: integer
           format: int64
+          example: 2
+        id_categoria_food_provider:
+          type: integer
+          format: int64
+          example: 4
+        id_profilo:
+          type: integer
+          format: int64
           example: 6
-        stato:
-          type: integer
-          format: int64
-          example: 8
-        id_tipo_pagamento:
-          type: integer
-          format: int64
-          example: 10
-        orario_ordine_effettuato:
-          type: timestamp
-          example: '2024-01-08'
-        orario_arrivo_previsto:
-          type: timestamp
-          example: '2024-01-08'
-        orario_arrivo_effettivo:
-          type: timestamp
-          example: '2024-01-08'
-        note:
+        partita_iva:
           type: string
-          example: "Terzo piano!"
-        indirizzo_alternativo:
+          example: "akvmrknf34"
+        nome_food_provider:
           type: string
-          example: "Via Cartelgomberto 24"
-         
+          example: "MrRonald's"
+        prezzo consegna:
+          type: double
+          example: 8.0
+        ordine minimo:
+          type: double
+          example: 10.0
+        orario_food_provider:
+          type: string
+          example: "12:00-22:30"
+        
+
     ApiResponse:
       type: object
       properties:
@@ -275,11 +261,11 @@ components:
         name: '##default'
   requestBodies:
     Utente:
-          description: oggetto Ordine da aggiungere al registro
+          description: oggetto Provider da aggiungere al registro
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Ordine'
+            $ref: '#/components/schemas/Provider'
         application/xml:
           schema:
-            $ref: '#/components/schemas/Ordine'
+            $ref: '#/components/schemas/Provider'

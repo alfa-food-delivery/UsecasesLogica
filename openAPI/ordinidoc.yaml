@@ -147,29 +147,23 @@ paths:
       parameters:
         - name: id
           in: path
-          description: ID del turno che si vuole aggiornare
+          description: ID dell'ordine che si vuole aggiornare
           required: true
           schema:
             type: integer
             format: int64
-        - name: orario
-          in: path
-          description: Orario inizio/fine turno (in base al tipo)
-          required: true
-          schema:
-            type: timestamp
       requestBody:
-        description: Update di un turno esistente
+        description: Update di un ordine esistente
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Turno'
+              $ref: '#/components/schemas/Ordine'
           application/xml:
             schema:
-              $ref: '#/components/schemas/Turno'
+              $ref: '#/components/schemas/Ordine'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/Turno'
+              $ref: '#/components/schemas/Ordine'
         required: true
       responses:
         '200':
@@ -177,33 +171,33 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Turno'        
+                $ref: '#/components/schemas/Ordine'        
             application/xml:
               schema:
-                $ref: '#/components/schemas/Turno'
+                $ref: '#/components/schemas/Ordine'
         '400':
           description: ID fornito non valido
         '404':
-          description: Turno non trovato
+          description: Ordine non trovato
         '405':
           description: Errore di validazione
             
     delete:
       tags:
-        - turno
-      summary: Cancella un turno
-      description: cancella un turno dato l'id
-      operationId: cancellaTurno
+        - ordine
+      summary: Cancella un ordine
+      description: cancella un ordine dato l'id
+      operationId: cancellaOrdine
       parameters:
         - name: api_key
           in: header
-          description: cancella un turno 
+          description: cancella un ordine 
           required: false
           schema:
             type: int
         - name: id
           in: path
-          description: ID del turno da eliminare
+          description: ID del ordine da eliminare
           required: true
           schema:
             type: integer
@@ -214,7 +208,7 @@ paths:
         '400':
           description: ID fornito non valido
         '404':
-          description: Turno non trovato!
+          description: Ordine non trovato!
         
 
 components:
