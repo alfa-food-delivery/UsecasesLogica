@@ -28,7 +28,7 @@ paths:
       tags:
         - ordine
       summary: Ottieni gli ordini esistenti
-      description: Ottienigli ordini esistenti
+      description: Ottieni gli ordini esistenti
       operationId: elencoOrdini
       responses:
         '200':
@@ -82,7 +82,7 @@ paths:
       tags:
         - ordine
       summary: Trova ordini dall'ID del profilo che ha effettuato l'ordine (hashed)
-      description: Ritorna un singolo ordine
+      description: Ritorna una lista di ordini
       operationId: getOrdine
       parameters:
         - name: id
@@ -105,13 +105,44 @@ paths:
         '400':
           description: ID fornito non valido
         '404':
+          description: Ordini non trovato
+    
+  /ordine/{stato}:
+    get:
+      tags:
+        - ordine
+      summary: Trova ordini dall'ID dello stato dell'ordine
+      description: Ritorna una lista di ordini
+      operationId: getOrdine
+      parameters:
+        - name: stato
+          in: path
+          description: ID dello stato attuale dell'ordine
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ordine'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Ordine'
+        '400':
+          description: Stato fornito non valido
+        '404':
           description: Ordine non trovato
-    <-------------------->
+    
+  /ordine/{id}:
     put:
       tags:
-        - turno
-      summary: Update di un turno esistente
-      description: Update di un turno esistente dato l'Id turno
+        - ordine
+      summary: Update di un ordine esistente
+      description: Update di un ordine esistente dato l'Id ordine
       operationId: aggiornaTurno
       parameters:
         - name: id
@@ -189,26 +220,46 @@ paths:
 components:
   schemas:
 
-    Turno:
+    Ordine:
       required:
-        - id_profilo
+        - id_profilo_cliente
       type: object
       properties:
         id_turno:
           type: integer
           format: int64
           example: 2
-        id_profilo:
+        id_profilo_fattorino:
+          type: integer
+          format: int64
+          example: 4
+        id_food_provider:
+          type: integer
+          format: int64
+          example: 6
+        stato:
+          type: integer
+          format: int64
+          example: 8
+        id_tipo_pagamento:
           type: integer
           format: int64
           example: 10
-        tipo:
-          type: integer
-          format: int64
-          example: 23
-        orario:
+        orario_ordine_effettuato:
           type: timestamp
           example: '2024-01-08'
+        orario_arrivo_previsto:
+          type: timestamp
+          example: '2024-01-08'
+        orario_arrivo_effettivo:
+          type: timestamp
+          example: '2024-01-08'
+        note:
+          type: string
+          example: "Terzo piano!"
+        indirizzo_alternativo:
+          type: string
+          example: "Via Cartelgomberto 24"
          
     ApiResponse:
       type: object
@@ -224,11 +275,11 @@ components:
         name: '##default'
   requestBodies:
     Utente:
-      description: oggetto Turno da aggiungere al registro
+          description: oggetto Ordine da aggiungere al registro
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Turno'
+            $ref: '#/components/schemas/Ordine'
         application/xml:
           schema:
-            $ref: '#/components/schemas/Turno'
+            $ref: '#/components/schemas/Ordine'
