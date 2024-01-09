@@ -76,7 +76,37 @@ paths:
                 $ref: '#/components/schemas/Prodotto'
         '405':
           description: Input non valido
-            
+  
+  /prodotto/{categoria}:
+    get:
+      tags:
+        - prodotto
+      summary: Trova i prodotti in base alla categoria
+      description: Restituisce una lista di Prodotti
+      operationId: getProdotto
+      parameters:
+        - name: categoria
+          in: path
+          description: ID della categoria del prodotto
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prodotto'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Prodotto'
+        '400':
+          description: ID fornito non valido
+        '404':
+          description: Prodotti non trovati
+  
   /prodotto/{id}:
     get:
       tags:
@@ -105,7 +135,8 @@ paths:
         '400':
           description: ID fornito non valido
         '404':
-          description: Prodotto non trovato
+          description: Prodotti non trovati
+          
     put:
       tags:
         - prodotto
