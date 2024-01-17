@@ -1,0 +1,251 @@
+openapi: 3.0.3
+info:
+  title: Swagger Prodotti REST - OpenAPI 3.0
+  description: |-
+    Servizio per la gestione dei prodotti.
+
+    _If you're looking for the Swagger 2.0/OAS 2.0 version of SpeseManager, then click [here](https://editor.swagger.io/?url=https://petstore.swagger.io/v2/swagger.yaml). Alternatively, you can load via the `Edit > Load Petstore OAS 2.0` menu option!_
+    
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: enrico.trx@hotmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: http://localhost:8080/ProdottiServ/
+tags:
+  - name: prodotto
+    description: Tutto riguardo i tuoi prodotti
+paths:
+  /prodotto:
+  
+    get:
+      tags:
+        - prodotti
+      summary: Ottieni i prodotti esistenti
+      description: Ottieni i prodotti esistenti
+      operationId: elencoProdotti
+      responses:
+        '200':
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prodotto'    
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Prodotto'                
+        '404':
+          description: Prodotti non trovati
+        '500':
+          description: Internal Server Error
+          
+    post:
+      tags:
+        - prodotto
+      summary: Aggiungi un nuovo prodotto
+      description: Aggiungi un nuovo prodotto
+      operationId: creaProdotto
+      requestBody:
+        description: Crea un nuovo prodotto
+        content:
+          application/json:
+              schema:
+                $ref: '#/components/schemas/Prodotto'    
+          application/xml:
+              schema:
+                $ref: '#/components/schemas/Prodotto'   
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Prodotto'
+        required: true
+      responses:
+        '200':
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prodotto'        
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Prodotto'
+        '405':
+          description: Input non valido
+  
+  /prodotto/{categoria}:
+    get:
+      tags:
+        - prodotto
+      summary: Trova i prodotti in base alla categoria
+      description: Restituisce una lista di Prodotti
+      operationId: getProdotto
+      parameters:
+        - name: categoria
+          in: path
+          description: ID della categoria del prodotto
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prodotto'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Prodotto'
+        '400':
+          description: ID fornito non valido
+        '404':
+          description: Prodotti non trovati
+  
+  /prodotto/{id}:
+    get:
+      tags:
+        - prodotto
+      summary: Trova prodotto dall'ID (hashed)
+      description: Ritorna un singolo prodotto
+      operationId: getProdotto
+      parameters:
+        - name: id
+          in: path
+          description: ID del prodotto da ritornare
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prodotto'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Prodotto'
+        '400':
+          description: ID fornito non valido
+        '404':
+          description: Prodotti non trovati
+          
+    put:
+      tags:
+        - prodotto
+      summary: Update di una prodotto esistente
+      description: Update di un prodotto esistente dato l'Id
+      operationId: aggiornaProdotto
+      requestBody:
+        description: Update di un prodotto esistente
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Prodotto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Prodotto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Prodotto'
+        required: true
+      responses:
+        '200':
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prodotto'        
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Prodotto'
+        '400':
+          description: ID fornito non valido
+        '404':
+          description: Prodotto non trovata
+        '405':
+          description: Errore di validazione
+            
+    delete:
+      tags:
+        - prodotto
+      summary: Cancella un prodotto
+      description: cancella un prodotto dato l'id
+      operationId: cancellaProdotto
+      parameters:
+        - name: api_key
+          in: header
+          description: ''
+          required: false
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: ID del prodotto da eliminare
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Operazione riuscita!
+        '400':
+          description: ID fornito non valido
+        '404':
+          description: Prodotto non trovato!
+        
+components:
+  schemas:
+
+    Prodotto:
+      required:
+        - id_categoria_prodotto
+      type: object
+      properties:
+        id_prodotto:
+          type: integer
+          format: int64
+          example: 10
+        id_categoria_prodotto:
+          type: integer
+          format: int64
+          example: 10
+        nome:
+          type: string
+          example: 'Salumi'
+        descrizione:
+          type: string
+          example: 'Molto buono!'
+        prezzo:
+          type: decimal
+          example: 11.90
+         
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+      xml:
+        name: '##default'
+  requestBodies:
+    Prodotto:
+      description: oggetto Prodotto da aggiungere al registro
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Prodotto'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Prodotto'
